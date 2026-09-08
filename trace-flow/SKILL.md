@@ -1,6 +1,7 @@
 ---
 name: trace-flow
 description: Instrument code with tagged log statements to trace end-to-end system flow — how an observed behavior came about. Adds logs only; never applies a fix. Use when investigating issues that span layers, build steps, or caching, or when asked to "trace" or "add debug logging".
+license: MIT
 ---
 
 # Trace System Flow

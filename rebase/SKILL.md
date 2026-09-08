@@ -1,6 +1,7 @@
 ---
 name: rebase
 description: Rebase the current branch or stack onto its upstream target, in git or Sapling/Mercurial. Use only when the user invokes /rebase or explicitly asks to rebase — it rewrites history, so never start it on inference.
+license: MIT
 ---
 
 Takes an optional argument: a branch or bookmark name. Fall back to the defaults below when none is given.

@@ -1,6 +1,7 @@
 ---
 name: conflicts
 description: Resolve every merge conflict in the working tree, then drive the in-progress merge or rebase to completion. Use when the user asks to resolve conflicts or invokes /conflicts — not on your own initiative when you notice a conflicted file.
+license: MIT
 ---
 
 For each conflicted file:

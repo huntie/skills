@@ -1,6 +1,7 @@
 ---
 name: materialize
 description: Turn a described change into code and commit it, using the given title and description as the whole specification. Use only when the user invokes /materialize.
+license: MIT
 ---
 
 The user provides a commit title and optional description, separated by a comma or newline. The title says *what* the change is; the description (if any) says *why* or gives additional context.
