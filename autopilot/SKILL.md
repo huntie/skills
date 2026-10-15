@@ -39,10 +39,10 @@ Stage by path, never the whole tree. A commit holds one unit's files; changes al
 
 ## How to commit
 
-- Before the first commit in a checkout, confirm the branch. Work in a checkout lands on a task branch per `AGENTS.md`, never on the default branch; if the checkout is still on its default branch, start the branch first with `scripts/pull` and `scripts/checkout <owner/repo>@<name> --new`. This repo, `vault/`, and `dotfiles/` commit on `main`.
+- Before the first commit in a checkout, confirm the branch. Work in a checkout lands on a task branch per `AGENTS.md`, never on the default branch; if the checkout is still on its default branch, start the branch first with `scripts/pull` and `scripts/checkout <owner/repo>@<name> --new`. This repo, `vault/`, and `dotfiles/` commit on `main`. A Sapling checkout of a shared repo takes no named branch: commit drafts with `sl` on top of the synced default branch.
 - Write every message with the commit-msg skill; it also carries the git and Sapling commands.
 - Amend only the latest commit, only for a correction to it (a missed file, a lint fix, a typo), and only while it is unpushed. Anything else is a new commit. Reordering and squashing the stack are the user's call afterward, unless `squash` is on.
-- When a `gh stack` is checked out, commit on the layer that owns the concern per the gh-stack skill. The `commit` rung produces commits, not layers. In a Sapling checkout, per `AGENTS.md`, each commit is a layer: commit on the task branch with `sl`.
+- When a `gh stack` is checked out, commit on the layer that owns the concern per the gh-stack skill. The `commit` rung produces commits, not layers. In a Sapling checkout, per `AGENTS.md`, each commit is a layer: commit with `sl` on the task branch, or on the draft stack itself in a shared repo.
 
 ## Squash
 
