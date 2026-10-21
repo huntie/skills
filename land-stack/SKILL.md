@@ -14,12 +14,12 @@ Merging is outward-facing and cannot be undone, so this runs only on the user's 
 ## Before merging
 
 1. List the stack bottom to top: `gh stack view --json` when the stack is checked out, else read each PR's `baseRefName` from `gh pr view <n> --json number,title,baseRefName,mergeable,mergeStateStatus,reviewDecision,isDraft` and follow the bases down to the trunk.
-2. Stop and report when any layer is a draft, not `MERGEABLE`, or has a `reviewDecision` other than `APPROVED`. `UNSTABLE` alone is fine: it means a non-required check is pending or failing, and branch protection decides at merge time.
-3. Tell the user the order and the PR numbers in one line, then start; do not ask again.
+2. Find the ready layers: walk up from the bottom and stop at the first layer that is a draft, not `MERGEABLE`, or has a `reviewDecision` other than `APPROVED`. Every layer below it lands; it and every layer above stay open, even ones that are ready, since a layer cannot land before the one under it. `UNSTABLE` alone is fine: it means a non-required check is pending or failing, and branch protection decides at merge time. When the bottom layer is not ready, stop and report.
+3. Tell the user in one line the PRs that will land, in order, and the first one that stays and why, then start; do not ask again.
 
 ## Merging
 
-For each layer, bottom first:
+For each ready layer, bottom first:
 
 1. `gh stack merge <pr> --yes --squash` merges that PR alone, since it is the bottom of what remains. In a repository with no GitHub stack, `gh pr merge <pr> --squash` does the same. Use the merge method the user named, if any.
 2. Confirm it: `gh pr view <pr> --json state,mergeCommit` reads `MERGED`, and note the merge commit.
@@ -29,6 +29,6 @@ Stop at the first failure and report what merged and what did not. Never bypass 
 
 ## After
 
-- Report each PR with its merge commit, bottom to top.
+- Report each PR with its merge commit, bottom to top, then the layers left open and what each is waiting on. The lowest of them now targets the trunk.
 - Update the plan that names the branch: its `Status:` tag becomes `[merged #<bottom>]`, or the per-PR numbers when there are several.
 - In the checkout, `scripts/pull` to bring the trunk level. The local stack's commits are now on the trunk as squash commits; leave the task branch for the user to delete.
