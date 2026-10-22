@@ -13,7 +13,7 @@ Takes an optional `draft` argument.
 ## Preconditions
 
 - Git, or Sapling where git config has `devroot.vcs=sapling`, which follows its own section below.
-- The branch holds exactly one commit over its base, `origin/<default branch>` or the upstream's on a fork; in Sapling, `sl log -r 'draft() & ::.'` lists one commit. None: stop. Several: stop and offer squash, or submit-stack for one PR per commit.
+- The branch holds exactly one commit over its base, `origin/<default branch>` or the upstream's on a fork; in Sapling, `sl log -r 'draft() & ::.'` lists one commit. None: stop. Several: stop and offer to squash them into one, or submit-stack for one PR per commit.
 - The branch is a task branch, never the default branch. In Sapling on a shared repo, where `origin` is canonical, there is no named branch: the commit is a draft on top of the default branch, and `sl pr submit` pushes it as `pr<number>`. Never push a named branch for it.
 - Nothing here touches the working tree or the index.
 

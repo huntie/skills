@@ -6,7 +6,7 @@ license: MIT
 
 # Submit stack
 
-The multi-commit counterpart of the submit skill: each commit, prepared with commit-msg and usually tidied by squash, becomes one layer and one PR. Read the submit skill first; its rules for the description, the saved message, and outward-facing actions apply to every PR here unchanged. For `gh stack` itself, follow the gh-stack skill, including its non-interactive flags.
+The multi-commit counterpart of the submit skill: each commit, prepared with commit-msg and usually squashed into shape first, becomes one layer and one PR. Read the submit skill first; its rules for the description, the saved message, and outward-facing actions apply to every PR here unchanged. For `gh stack` itself, follow the gh-stack skill, including its non-interactive flags.
 
 Takes an optional `draft` argument. `gh stack submit` opens drafts by default, so without `draft` pass `--open`.
 
@@ -14,14 +14,14 @@ Takes an optional `draft` argument. `gh stack submit` opens drafts by default, s
 
 - Git, or Sapling where git config has `devroot.vcs=sapling`, which follows its own section below.
 - Stacked PRs are same-repository: `origin` has to be where the PRs open. In a fork layout, where `upstream` exists and the PRs belong upstream, stop and say so; offer submit for the bottom commit instead.
-- Two or more commits over the base. One: use submit. When a stack is already checked out (`gh stack view --json` succeeds), every layer holds exactly one commit; a layer with several stops the run, with squash offered to fold it.
+- Two or more commits over the base. One: use submit. When a stack is already checked out (`gh stack view --json` succeeds), every layer holds exactly one commit; a layer with several stops the run, with a squash offered to fold it.
 - Staged and working tree changes stay untouched: rewrite messages with `--only`, and stash nothing.
 
 ## Steps
 
 1. Read every commit bottom to top, `git log --reverse --format='%H' <base>..HEAD`, and save each full message to `$(git rev-parse --git-dir)/submit/<sha>.md`. Check which layers are already submitted with `scripts/pr-info <checkout> --branch <layer>`.
 2. Drop the bodies, keeping each title:
-   - **No stack yet:** Rebuild the chain on a detached head, as squash does: `git branch -f submit-backup HEAD`, `git checkout --detach <base>`, then for each commit `git cherry-pick --no-commit <sha>` and `git commit --only -m "<title>"`. Confirm `git rev-parse HEAD^{tree}` matches the old tip's tree; on a mismatch, `git reset --hard submit-backup` and stop.
+   - **No stack yet:** Rebuild the chain on a detached head: `git branch -f submit-backup HEAD`, `git checkout --detach <base>`, then for each commit `git cherry-pick --no-commit <sha>` and `git commit --only -m "<title>"`. Confirm `git rev-parse HEAD^{tree}` matches the old tip's tree; on a mismatch, `git reset --hard submit-backup` and stop.
    - **Existing stack:** For each layer, bottom to top: `gh stack checkout <branch>`, `git commit --amend --only -m "<title>"`, `gh stack rebase --upstack`. Return with `gh stack top`.
 3. **No stack yet:** Create one branch per commit, bottom to top, each a brief kebab-case name from its title, with the owner prefix when `origin` is shared (the devroot branch rules apply). Point the original branch at the top commit so it stays the logical branch, then `gh stack init <bottom> … <original branch>` and check out the top.
 4. Push and open the PRs: `gh stack submit --auto --remote origin`, plus `--open` unless `draft`. For an existing stack this pushes the rewritten layers with lease.

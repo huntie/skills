@@ -46,11 +46,11 @@ Stage by path, never the whole tree. A commit holds one unit's files; changes al
 
 ## Squash
 
-A task that iterates leaves follow-ups in its stack: the spacing tuned twice, the label renamed, the lint fix. With `squash` on, the stack is tidied once the task is done, through the squash skill: fix-ups fold into the commits they fix, distinct changes stay distinct, and the result may be one commit or several. Off by default, since it rewrites history the user has not seen.
+A task that iterates leaves follow-ups in its stack: the spacing tuned twice, the label renamed, the lint fix. With `squash` on, the stack is squashed once the task is done: fix-ups fold into the commits they fix, distinct changes stay distinct, and the result may be one commit or several. Prove the tip with the repo's checks before history moves, rebuild on a detached head, and confirm the tree matches before pointing the branch at it; pushed commits are never folded. Off by default, since it rewrites history the user has not seen.
 
 - **What:** The unpushed commits since the tip the task started from. Record that tip when the task begins. A follow-up to a commit from before it stays its own commit. A task that touched several checkouts tidies each.
 - **When:** At the end of the task, before the closing recap, and ahead of anything the `push` rung pushes. Never at unit boundaries: units land as they settle, so a red check mid-task leaves a stack to inspect.
-- **Gate:** The squash skill's check decides. Red leaves the stack as it is, and the recap says so. A fold that is not a clear call is not made.
+- **Gate:** The checks decide. Red leaves the stack as it is, and the recap says so. A fold that is not a clear call is not made.
 
 ## Reporting
 
