@@ -1,6 +1,7 @@
 ---
 name: submit
 description: Promote the current branch's local commit to a GitHub pull request, moving the commit message body into the PR description (under the repo's PR template when there is one) and leaving the commit with its title alone. Takes "draft" to open the PR as a draft. Use only when the user invokes /submit or asks to submit the branch as a PR; for several commits as stacked PRs, use submit-stack.
+license: MIT
 ---
 
 # Submit

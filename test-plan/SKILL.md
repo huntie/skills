@@ -15,7 +15,7 @@ Ask only when the answer is not already there. It is already there when the task
 Options to draw from, by what the diff touches:
 
 - **Unit tests** for the touched package: the specific files, `yarn jest path/to/file.test.ts` or the repo's equivalent, never the whole suite.
-- **Screenshots per state** on a simulator, through the simulator-screenshots skill: one framed shot per state the change cares about, on iOS and Android as the change warrants, for anything visual.
+- **Screenshots per state** on a simulator, through the simulator-screenshots skill where it is installed: one framed shot per state the change cares about, on iOS and Android as the change warrants, for anything visual.
 - **Smoke test**, the fallback: build and launch a representative app on one device per affected platform, then one framed screenshot labelled by device with `✅ App builds and bundles`. For a change with nothing to see that can still break the build, bundling or startup: native code or targets, config plugins, dependencies and lockfiles, bundler setup. In a stack, each such layer gets its own, captured with that layer checked out.
 - **A check only the user can drive**, written as the steps for them.
 - **CI only**, said alone, when nothing is worth running locally.

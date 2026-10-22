@@ -1,6 +1,7 @@
 ---
 name: submit-stack
 description: Promote a stack of local commits to stacked GitHub pull requests with gh stack, or sl pr submit in a Sapling checkout, one PR per commit, moving each commit message body into its PR description and leaving each commit with its title alone. Takes "draft" to open the PRs as drafts. Use only when the user invokes /submit-stack or asks to submit the commits as a stack; for a single commit, use submit.
+license: MIT
 ---
 
 # Submit stack

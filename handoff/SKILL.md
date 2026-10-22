@@ -1,6 +1,7 @@
 ---
 name: handoff
 description: Write a handoff of the current session to vault/handoffs/ so it can be resumed on another machine, under a slug the skill picks. Use only when the user invokes /handoff.
+license: MIT
 disable-model-invocation: true
 ---
 

@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Autopilot
 
-**Continuously commit, when settled.** A commit lands at every unit boundary, once that unit is proven to work, so the branch is a stack of atomic commits by the end of the task: each holds one concern, stands on its own, and the stack reads as an argument for the change, per the sequence-verifiable-units principle.
+**Continuously commit, when settled.** A commit lands at every unit boundary, once that unit is proven to work, so the branch is a stack of atomic commits by the end of the task: each holds one concern, stands on its own, and the stack reads as an argument for the change: every commit ends in a state a reviewer can check, in an order that makes the case.
 
 Takes a rung, `squash`, or `off`, and each invocation restates the mode in full: `/autopilot push squash` sets both, `/autopilot commit` afterward drops squash. Invoking it is the explicit ask the standing rule against unasked commits requires, and the mode stays on until `off` or the end of the session. Say "Autopilot is on" in one line when it starts, naming the rung and squash when set; a conversation summary carries that line so the mode survives it.
 

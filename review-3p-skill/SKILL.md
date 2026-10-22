@@ -1,6 +1,7 @@
 ---
 name: review-3p-skill
 description: Review a third-party skill newly added to skills-lock.json before it is committed, checking its dependencies, layout, and content. Use after `npx skills add`, when skills-lock.json gains an entry, or when asked whether an installed skill is safe to commit.
+license: MIT
 ---
 
 # Review a third-party skill
