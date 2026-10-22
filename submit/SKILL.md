@@ -61,13 +61,17 @@ The same steps and the same description, with `sl pr submit` doing the push and 
 Find the repo's PR template in GitHub's usual locations, case ignored, including `.github/PULL_REQUEST_TEMPLATE/`; with several, pick the one matching the change, or the default.
 
 - **No template:** The body goes under `## Summary`, and its test plan, when it has one, under `## Test Plan`.
-- **Template:** Put the body under the heading closest to a summary, in order of preference: Summary, Description, Motivation, What. Replace that section's guidance comment rather than keeping it beside the body. When no section is an obvious fit, add `## Summary` above the template's sections and put the body there.
-- **Sections the body already carries:** When the body ends in a trailer that a template section exists to collect, drop that section and keep the trailer inside the body. In react-native, commit-msg's `Changelog: …` line is that trailer, so the `## Changelog:` section and its comment go, and the whole body, `Changelog:` line included, sits under `## Summary:`.
+- **Template:** Put the body under the heading closest to a summary, in order of preference: Summary, Description, Motivation, What. Replace that section's guidance comment rather than keeping it beside the body. A heading keeps its text but drops a trailing colon. When no section is an obvious fit, add `## Summary` above the template's sections and put the body there.
+- **Sections the body already carries:** When the body ends in a trailer that a template section exists to collect, drop that section and keep the trailer inside the body.
 - **Test Plan:** Fill it from what the session verified, per the test-plan skill: commands, outcomes, and screenshots laid out as it says, with every image a capped `<img>`, whatever the template says about layout. Claim only what was checked. When the session verified nothing, keep the template's prompt and say so in the report.
 - **Screenshots:** Upload with `scripts/gh-upload --repo <the repo the PR opens on>`, since an attachment shows only on a PR of the repository it was uploaded to and the script defaults to `origin`, the wrong one in a fork layout. When the token cannot push there, `--release` on `origin` gives public URLs at once.
 - **Every other section:** Keep it as the template has it.
 
 Keep the body's Markdown as written; commit-msg already writes it for a reviewer.
+
+### React Native
+
+The template's headings are `## Summary:`, `## Changelog:` and `## Test Plan:`, and the colons go: `## Summary` and `## Test Plan`. The `## Changelog:` section and its comment go too, since commit-msg's `Changelog: …` trailer is what it exists to collect, and the whole body, that line included, sits under `## Summary`.
 
 ## Reporting
 
