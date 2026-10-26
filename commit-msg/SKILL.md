@@ -15,7 +15,7 @@ Read the diff and write the message for a reviewer who sees only the title and t
 
 ## Summary
 
-Two to four sentences, or an opening sentence and a few short bullets, that say what changed and why. Open with the problem as the code behaves today, or with the change as an imperative; never with a result described as a state. Keep what a reviewer acts on: the motivation, behavior a user or caller can observe changing, a decision they might question, a caveat that affects whether it should land, and cross-references such as `Fixes #123`. Leave out what the diff already shows: renames, moved helpers, changed signatures, the order the work happened in, and test results, which go in the test plan.
+Two to four sentences, or an opening sentence and a few short bullets under a **Changes** heading, that say what changed and why. Open with the problem as the code behaves today, or with the change as an imperative; never with a result described as a state. Keep what a reviewer acts on: the motivation, behavior a user or caller can observe changing, a decision they might question, a caveat that affects whether it should land, and cross-references such as `Fixes #123`. Leave out what the diff already shows: renames, moved helpers, changed signatures, the order the work happened in, and test results, which go in the test plan.
 
 Bold headings, each on its own line with a blank line before and after, when the summary has two or more parts:
 
@@ -25,7 +25,7 @@ Bold headings, each on its own line with a blank line before and after, when the
 | Motivation | Why the change is worth making: the user pain or technical driver. |
 | Problem / Root cause / Fix | Bug narratives. Use the subset that fits. |
 | This diff | What this commit does, when Context or Motivation sets up a broader effort. |
-| Changes | Distinct changes grouped by concern. Omit if a sentence covers it. |
+| Changes | Distinct changes grouped by concern, and the default heading for summary bullets. Omit only when a sentence covers the change. |
 | Impact | What this means for users, performance or downstream consumers. |
 | Notes | Caveats, limitations or remaining work. |
 
@@ -37,7 +37,7 @@ Optional, as a `**Test plan**` block after the summary when something was run: w
 
 ## React Native
 
-In react-native and the repos sharing its PR template, `Changelog:` is a required trailer at the end of the summary: `Changelog: [Internal]` for an internal-only change, else `Changelog: [Category][Type] - <description>` with the type `Added`, `Fixed`, `Changed`, `Breaking` or `Deprecated`.
+In react-native and the repos sharing its PR template, `Changelog:` is a required trailer at the end of the summary: `Changelog: [Internal]` for an internal-only change, else `Changelog: [Category][Type] - <description>`, with the category `General`, `iOS` or `Android`, cased exactly so, and the type `Added`, `Fixed`, `Changed`, `Breaking` or `Deprecated`. Put the entry on the line after `Changelog:`, joined by a Markdown hard break (two trailing spaces). Don't copy the shape of a landed commit on `main`: Meta's import rewrites it into `Summary:`, `## Changelog:` and `[IOS] [ADDED]`, which contributors never write.
 
 ## Committing
 
