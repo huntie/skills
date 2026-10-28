@@ -31,13 +31,15 @@ Bold headings, each on its own line with a blank line before and after, when the
 
 Backtick every code symbol: API names, packages, paths, flags. In a stack, Context repeats word for word and only This diff changes.
 
+For a visual change or a clear DevTools comparison, include one before/after screenshot that shows the commit's impact.
+
 ## Test plan
 
 Optional, as a `**Test plan**` block after the summary when something was run: what was run and what it proved, per the test-plan skill.
 
 ## React Native
 
-In react-native and the repos sharing its PR template, `Changelog:` is a required trailer at the end of the summary: `Changelog: [Internal]` for an internal-only change, else `Changelog: [Category][Type] - <description>`, with the category `General`, `iOS` or `Android`, cased exactly so, and the type `Added`, `Fixed`, `Changed`, `Breaking` or `Deprecated`. Put the entry on the line after `Changelog:`, joined by a Markdown hard break (two trailing spaces). Don't copy the shape of a landed commit on `main`: Meta's import rewrites it into `Summary:`, `## Changelog:` and `[IOS] [ADDED]`, which contributors never write.
+In react-native and the repos sharing its PR template, `Changelog:` is a required trailer at the end of the summary: `Changelog: [Internal]` for an internal-only change, else `Changelog: [Category][Type] - <description>`, with the category `General`, `iOS` or `Android`, cased exactly so, and the type `Added`, `Fixed`, `Changed`, `Breaking` or `Deprecated`. Put the entry on the line after `Changelog:`, joined by a Markdown hard break (two trailing spaces). The template's `## Summary` heading hosts the message's own subheadings; keep them under it rather than flattening the body into prose. Don't copy the shape of a landed commit on `main`: Meta's import rewrites it into `Summary:`, `## Changelog:` and `[IOS] [ADDED]`, which contributors never write.
 
 ## Committing
 
