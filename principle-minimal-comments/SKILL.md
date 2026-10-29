@@ -14,7 +14,8 @@ Most code needs no comment. Names, types and structure carry the meaning; a comm
 
 - Inline code has no comments by default: not the step a line takes, the branch a condition guards, the phase a block belongs to.
 - Before commenting an unclear line, make it clear: rename, extract, shrink. Comment only what survives that, and say why, not what.
-- What earns one: a reason the code cannot show, a workaround for something external, code that does the opposite of what it appears to do, an invariant a caller must keep.
+- What earns one: a reason the code cannot show, a workaround for something external, code that does the opposite of what it appears to do, an invariant a caller must keep. Each applies only where the line would otherwise read as a mistake. A workaround that reads as ordinary code gets none: a `jest.mock` placed before a `require` is how tests look, whatever quirk of the toolchain forced the order.
+- Knowing why you chose a shape is not a reason to write it down. The author just learned the constraint and feels the reader needs it; the reader, who never saw the other shape, sees ordinary code and a comment that explains nothing visible.
 - At most one doc comment per function, type or module, at its head, and only when the name and signature leave a question. Behaviour spanning units lives in the document read before the code, never repeated in it.
 
 **Write for a reader who never saw the alternative**
@@ -29,6 +30,7 @@ The comment describes the code as it stands, not the path that produced it. This
 **Tests**
 
 - Delete it: is anything lost that the code or the doc does not already say?
+- Cover the comment: does the line still read as correct, ordinary code? Then it stays uncommented, even when you know the version that did not work.
 - Would a rename or an extraction remove the need?
 - Does it name something absent from the file — a discarded approach, a limit, another design? Then it leaked from the turn that wrote it.
 - Change the behaviour: does more than one place go stale?
