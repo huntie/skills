@@ -48,6 +48,7 @@ The PR description on GitHub is the source of truth, and the user may have edite
 4. Update only what changed: `gh pr edit --title` when the commit's title differs from the PR's, and `--body-file` only for a revised summary. Otherwise the description stays exactly as it is on GitHub.
 5. `draft` on a resubmit marks an open PR as a draft (`gh pr ready --undo`); leave the state alone without it.
 6. Resolve the review threads the push addressed: `scripts/pr-resolve-threads <checkout> --pr <number>` resolves the unresolved threads GitHub marked outdated by the push, and `--all` every unresolved one, for a push that addressed comments on lines that did not change. Leave a thread open when its comment was not acted on, such as a design question; `--dry-run` shows the split first.
+7. When the push acts on review comments the user drove in this session, post one comment on the PR with `gh pr comment <number> --body-file <file>`, without asking first: `@<reviewer> **Feedback addressed**`, then one high-level bullet per change, each ending in a link to the comment it answers, `([feedback 1](<comment URL>))`. Number the links in bullet order, and quote the posted text in the report. Skip it for a push that answers no review comment.
 
 ### Sapling
 
@@ -55,6 +56,7 @@ The same steps and the same description, with `sl pr submit` doing the push and 
 
 - Read the message with `sl log -r . -T '{desc}'`, and drop the body with `sl metaedit -r . -m "<title>"`.
 - Push and open with `sl pr submit`, plus `--draft` for `draft`. It opens the PR with the commit's title and, when it finds one, the raw template as the description; it looks only for lowercase `pull_request_template.md`, so replace the description at once with `gh pr edit <number> --body-file <file>`, reading the number from `scripts/pr-info <checkout>`.
+- Before a resubmit, check that `scripts/pr-info <checkout> --rev <node>` names the PR. The link is local to one machine, so a stack handed over from another machine or rebased since has none, and `sl pr submit` then opens a duplicate PR. Find the right commit first: the visible successor of the PR's remote head (`sl log -r 'successors(<head>)'`), confirmed by its own diff matching the head's. Hide a sibling copy with the same content from an older chain, then `sl pr link -r <node> <PR URL>` before submitting.
 - Resubmit with `sl pr submit`. It leaves the title and description alone, so a changed title goes through `gh pr edit --title`, and a revised summary through `--body-file`, as above.
 
 ## The description
