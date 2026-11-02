@@ -11,6 +11,8 @@ Read the diff and write the message for a reviewer who sees only the title and t
 ## Title
 
 - Imperative, concise and specific: "Fix retry loop in uploader", not "Fixed bug". Around 72 characters, no full stop, plain text with no Markdown.
+- Say what the commit does to the codebase, or to a feature as a whole, with a verb for that kind of change: "Replace root module aliases with standard subpath imports", not "Import through package subpath imports". Never pick an imperative that fits one thing the diff touches and turn the rest of the title into its object.
+- Drop articles and possessives that add nothing: "Align EPUBs to add page URL above title", not "Open the EPUB with the page's URL above the title".
 - No first person: never "we", "our" or "us". Name the change itself: "Switch to custom dev client", not "Add our own dev client".
 - A bug fix opens "Fix …": "Fix sheet background after dark mode change", not "Restore sheet background".
 - Prefix it with the scope the change targets, `scope: Subject`, where the scope answers *where*: a directory, package, subsystem or file. Match the repo's history, `git log --no-merges -20 -- <paths you touched>`, including the capitalization after the prefix. Square brackets are markers before the scope, `[WIP]` or `[RFC]`, or a tuple where the repo uses one, such as React Native's `[General][Fixed]`.
