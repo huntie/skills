@@ -17,7 +17,7 @@ Takes an optional `draft` argument.
 - The branch is a task branch, never the default branch. In Sapling on a shared repo, where `origin` is canonical, there is no named branch: the commit is a draft on top of the default branch, and `sl pr submit` pushes it as `pr<number>`. Never push a named branch for it.
 - Nothing here touches the working tree or the index.
 
-The user's invocation is the confirmation for pushing and opening the PR; never push anywhere else.
+The user's invocation is the confirmation for pushing and opening the PR; never push anywhere else. It does not cover comments: show the full text of any comment for the PR, such as a reply to a reviewer, and post it only once the user approves it.
 
 ## Where the PR goes
 
@@ -47,8 +47,7 @@ The PR description on GitHub is the source of truth, and the user may have edite
 3. Push with `git push --force-with-lease origin <branch>`.
 4. Update only what changed: `gh pr edit --title` when the commit's title differs from the PR's, and `--body-file` only for a revised summary. Otherwise the description stays exactly as it is on GitHub.
 5. `draft` on a resubmit marks an open PR as a draft (`gh pr ready --undo`); leave the state alone without it.
-6. Resolve the review threads the push addressed: `scripts/pr-resolve-threads <checkout> --pr <number>` resolves the unresolved threads GitHub marked outdated by the push, and `--all` every unresolved one, for a push that addressed comments on lines that did not change. Leave a thread open when its comment was not acted on, such as a design question; `--dry-run` shows the split first.
-7. When the push acts on review comments the user drove in this session, post one comment on the PR with `gh pr comment <number> --body-file <file>`, without asking first: `@<reviewer> **Feedback addressed**`, then one high-level bullet per change, each ending in a link to the comment it answers, `([feedback 1](<comment URL>))`. Number the links in bullet order, and quote the posted text in the report. Skip it for a push that answers no review comment.
+6. When the push answers review comments, resolve the review threads it addressed, and leave a thread open when its comment was not acted on, such as a design question.
 
 ### Editing a submitted description
 
