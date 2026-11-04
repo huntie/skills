@@ -42,13 +42,23 @@ Check the branch first: `scripts/pr-info <checkout>` from the devroot workspace.
 
 The PR description on GitHub is the source of truth, and the user may have edited it since.
 
-1. Read the PR fresh: `gh pr view <number> --repo <repo> --json title,body`.
-2. A body on the commit again is a revised summary: save the message as in a first submit, write it into the summary section of the fresh description, leaving the rest as the user has it, and drop it from the commit.
+1. Read the PR's title fresh: `gh pr view <number> --repo <repo> --json title`.
+2. A body on the commit again is a revised summary: save the message as in a first submit, write it into the summary section of the description as [Editing a submitted description](#editing-a-submitted-description) says, and drop it from the commit.
 3. Push with `git push --force-with-lease origin <branch>`.
 4. Update only what changed: `gh pr edit --title` when the commit's title differs from the PR's, and `--body-file` only for a revised summary. Otherwise the description stays exactly as it is on GitHub.
 5. `draft` on a resubmit marks an open PR as a draft (`gh pr ready --undo`); leave the state alone without it.
 6. Resolve the review threads the push addressed: `scripts/pr-resolve-threads <checkout> --pr <number>` resolves the unresolved threads GitHub marked outdated by the push, and `--all` every unresolved one, for a push that addressed comments on lines that did not change. Leave a thread open when its comment was not acted on, such as a design question; `--dry-run` shows the split first.
 7. When the push acts on review comments the user drove in this session, post one comment on the PR with `gh pr comment <number> --body-file <file>`, without asking first: `@<reviewer> **Feedback addressed**`, then one high-level bullet per change, each ending in a link to the comment it answers, `([feedback 1](<comment URL>))`. Number the links in bullet order, and quote the posted text in the report. Skip it for a push that answers no review comment.
+
+### Editing a submitted description
+
+Every write to a submitted PR's description, whether a revised summary, a stripped footer or a section the user asked to change, starts from the body on GitHub at that moment, since the user may be editing it there at the same time:
+
+1. Read the body into a new file with `gh api repos/<owner>/<repo>/pulls/<number> --jq .body`. Never edit from an earlier read or a saved copy: the `submit/` files under the git dir hold the message and body as first submitted, and are never a source for a later edit.
+2. Change only the sections asked for, and keep the user's wording everywhere else.
+3. Check before writing: each replacement target matched exactly once, and a diff of the new file against the fresh read touches only those sections. Chain the write after the check, `<check> && gh pr edit <number> --repo <repo> --body-file <file>`, so a failed check blocks it. On a failure, stop and read the body again; never fall back to an older file.
+
+An overwritten description can be recovered from the PR's edit history: the GraphQL `userContentEdits(first: N)` connection on the pull request holds each earlier version in its `diff` field, with CRLF line endings to strip.
 
 ### Sapling
 
@@ -58,7 +68,7 @@ The same steps and the same description, with `sl pr submit` doing the push and 
 - Push and open with `sl pr submit`, plus `--draft` for `draft`. It opens the PR with the commit's title and, when it finds one, the raw template as the description; it looks only for lowercase `pull_request_template.md`, so replace the description at once with `gh pr edit <number> --body-file <file>`, reading the number from `scripts/pr-info <checkout>`.
 - Before a resubmit, check that `scripts/pr-info <checkout> --rev <node>` names the PR. The link is local to one machine, so a stack handed over from another machine or rebased since has none, and `sl pr submit` then opens a duplicate PR. Find the right commit first: the visible successor of the PR's remote head (`sl log -r 'successors(<head>)'`), confirmed by its own diff matching the head's. Hide a sibling copy with the same content from an older chain, then `sl pr link -r <node> <PR URL>` before submitting.
 - Resubmit with `sl pr submit`. It leaves the title and description alone, so a changed title goes through `gh pr edit --title`, and a revised summary through `--body-file`, as above.
-- A commit in a stack of two or more PRs is the exception when resubmitted with `--stack`: that push rewrites every open PR's description with Sapling's stack footer appended, a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR. Plain `sl pr submit` from the one commit writes no footer. The submit-stack skill keeps those descriptions footer-free, so after a `--stack` push read each body fresh and strip the footer with `gh pr edit <number> --body-file <file>`, changing nothing else.
+- A commit in a stack of two or more PRs is the exception when resubmitted with `--stack`: that push rewrites every open PR's description with Sapling's stack footer appended, a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR. Plain `sl pr submit` from the one commit writes no footer. The submit-stack skill keeps those descriptions footer-free, so after a `--stack` push strip the footer from each body as [Editing a submitted description](#editing-a-submitted-description) says, changing nothing else.
 
 ## The description
 
