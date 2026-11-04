@@ -62,7 +62,7 @@ The same steps and the same description, with `sl pr submit` doing the push and 
 
 ## The description
 
-Find the repo's PR template in GitHub's usual locations, case ignored, including `.github/PULL_REQUEST_TEMPLATE/`; with several, pick the one matching the change, or the default.
+Find the repo's PR template in GitHub's usual locations, case ignored, including `.github/PULL_REQUEST_TEMPLATE/`; with several, pick the one matching the change, or the default. When the commit-msg skill gives a layout for the repo's description, that layout overrides the rules below and the template's own guidance.
 
 - **No template:** The body goes under `## Summary`, and its test plan, when it has one, under `## Test Plan`.
 - **Template:** Put the body under the heading closest to a summary, in order of preference: Summary, Description, Motivation, What. Replace that section's guidance comment rather than keeping it beside the body. A heading keeps its text but drops a trailing colon. When no section is an obvious fit, add `## Summary` above the template's sections and put the body there.
