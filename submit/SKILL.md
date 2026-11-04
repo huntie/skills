@@ -14,7 +14,7 @@ Takes an optional `draft` argument.
 
 - Git, or Sapling where git config has `devroot.vcs=sapling`, which follows its own section below.
 - The branch holds exactly one commit over its base, `origin/<default branch>` or the upstream's on a fork; in Sapling, `sl log -r 'draft() & ::.'` lists one commit. None: stop. Several: stop and offer to squash them into one, or submit-stack for one PR per commit.
-- The branch is a task branch, never the default branch. In Sapling on a shared repo, where `origin` is canonical, there is no named branch: the commit is a draft on top of the default branch, and `sl pr submit` pushes it as `pr<number>`. Never push a named branch for it.
+- The branch is a task branch, never the default branch. In Sapling on a shared repo, where `origin` is canonical, there is no named branch: the commit is a draft on top of the default branch, and `scripts/sl-pr-submit` pushes it as `pr<number>`. Never push a named branch for it.
 - Nothing here touches the working tree or the index.
 
 The user's invocation is the confirmation for pushing and opening the PR; never push anywhere else. It does not cover comments: show the full text of any comment for the PR, such as a reply to a reviewer, and post it only once the user approves it.
@@ -61,13 +61,13 @@ An overwritten description can be recovered from the PR's edit history: the Grap
 
 ### Sapling
 
-The same steps and the same description, with `sl pr submit` doing the push and the PR creation. The checkout's sl config, set by `scripts/checkout`, pushes each PR from a branch of its own (`pr<number>`) and keeps the PR's title and description on every later submit.
+The same steps and the same description, with `scripts/sl-pr-submit` doing the push and the PR creation. It runs `sl pr submit`, which pushes every draft under the working copy, after pulling and refusing a draft that is not yours; never run `sl pr submit` directly. The checkout's sl config, set by `scripts/checkout`, pushes each PR from a branch of its own (`pr<number>`) and keeps the PR's title and description on every later submit.
 
 - Read the message with `sl log -r . -T '{desc}'`, and drop the body with `sl metaedit -r . -m "<title>"`.
-- Push and open with `sl pr submit`, plus `--draft` for `draft`. It opens the PR with the commit's title and, when it finds one, the raw template as the description; it looks only for lowercase `pull_request_template.md`, so replace the description at once with `gh pr edit <number> --body-file <file>`, reading the number from `scripts/pr-info <checkout>`.
+- Push and open with `scripts/sl-pr-submit <checkout>`, plus `--draft` for `draft`. It opens the PR with the commit's title and, when it finds one, the raw template as the description; it looks only for lowercase `pull_request_template.md`, so replace the description at once with `gh pr edit <number> --body-file <file>`, reading the number from `scripts/pr-info <checkout>`.
 - Before a resubmit, check that `scripts/pr-info <checkout> --rev <node>` names the PR. The link is local to one machine, so a stack handed over from another machine or rebased since has none, and `sl pr submit` then opens a duplicate PR. Find the right commit first: the visible successor of the PR's remote head (`sl log -r 'successors(<head>)'`), confirmed by its own diff matching the head's. Hide a sibling copy with the same content from an older chain, then `sl pr link -r <node> <PR URL>` before submitting.
-- Resubmit with `sl pr submit`. It leaves the title and description alone, so a changed title goes through `gh pr edit --title`, and a revised summary through `--body-file`, as above.
-- A commit in a stack of two or more PRs is the exception when resubmitted with `--stack`: that push rewrites every open PR's description with Sapling's stack footer appended, a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR. Plain `sl pr submit` from the one commit writes no footer. The submit-stack skill keeps those descriptions footer-free, so after a `--stack` push strip the footer from each body as [Editing a submitted description](#editing-a-submitted-description) says, changing nothing else.
+- Resubmit with `scripts/sl-pr-submit <checkout>`. It leaves the title and description alone, so a changed title goes through `gh pr edit --title`, and a revised summary through `--body-file`, as above.
+- A commit in a stack of two or more PRs is the exception when resubmitted from any commit but the bottom one: that push rewrites the description of every open PR from the bottom up to it with Sapling's stack footer appended, a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR. The submit-stack skill keeps those descriptions footer-free, so after such a push strip the footer from each body as [Editing a submitted description](#editing-a-submitted-description) says, changing nothing else.
 
 ## The description
 
