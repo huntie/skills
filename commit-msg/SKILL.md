@@ -11,7 +11,8 @@ Read the diff and write the message for a reviewer who sees only the title and t
 ## Title
 
 - Imperative, concise and specific: "Fix retry loop in uploader", not "Fixed bug". Around 72 characters, no full stop, plain text with no Markdown.
-- Say what the commit does to the codebase, or to a feature as a whole, with a verb for that kind of change: "Replace root module aliases with standard subpath imports", not "Import through package subpath imports". Never pick an imperative that fits one thing the diff touches and turn the rest of the title into its object.
+- Say what the commit does to the codebase, or to a feature as a whole, with a verb for that kind of change: "Replace root module aliases with standard subpath imports", not "Import through package subpath imports". Never pick an imperative that fits one thing the diff touches and turn the rest of the title into its object, and never narrate what the user now does or sees: "Move webpage URL entry to dialog", not "Ask for webpage URL in a dialog".
+- Describe the feature, not the plumbing: "Support axisBehavior on bottom toolbar items", not "Set axisBehavior on bottom toolbar items", which hides that a public prop was added.
 - Drop articles that add nothing: "Align EPUBs to add page URL above title", not "Open the EPUB with the page URL above the title".
 - No possessives: put the owner in front as a plain noun. "Align send sheet page preview with Recents thumbnails", not "Align send sheets' page preview with Recents thumbnails".
 - No first person: never "we", "our" or "us". Name the change itself: "Switch to custom dev client", not "Add our own dev client".
