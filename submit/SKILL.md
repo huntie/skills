@@ -74,12 +74,13 @@ The same steps and the same description, with `scripts/sl-pr-submit` doing the p
 Find the repo's PR template in GitHub's usual locations, case ignored, including `.github/PULL_REQUEST_TEMPLATE/`; with several, pick the one matching the change, or the default. When the commit-msg skill gives a layout for the repo's description, that layout overrides the rules below and the template's own guidance.
 
 - **No template:** The body goes under `## Summary`, and its test plan, when it has one, under `## Test Plan`.
-- **Template:** Put the body under the heading closest to a summary, in order of preference: Summary, Description, Motivation, What. Replace that section's guidance comment rather than keeping it beside the body. A heading keeps its text but drops a trailing colon. When no section is an obvious fit, add `## Summary` above the template's sections and put the body there.
+- **Template:** Put the body under the heading closest to a summary, in order of preference: Summary, Description, Motivation, What. A heading keeps its text but drops a trailing colon. When no section is an obvious fit, add `## Summary` above the template's sections and put the body there.
+- **HTML comments:** Delete every `<!-- … -->` comment in the template, then collapse the blank lines left behind so no run of more than one remains. They are guidance for the author, which this skill has already read and followed, and a squash merge copies whatever survives into the landed commit message.
 - **Sections the body already carries:** When the body ends in a trailer that a template section exists to collect, drop that section and keep the trailer inside the body.
 - **No attribution trailer:** The description carries no `Generated with Claude Code` line or session link, whatever the harness suggests; the commit's `Co-Authored-By` trailer is unaffected.
-- **Test Plan:** Fill it from what the session verified, per the test-plan skill: commands, outcomes, and screenshots laid out as it says, with every image a capped `<img>`, whatever the template says about layout. Claim only what was checked. When the session verified nothing, keep the template's prompt and say so in the report.
+- **Test Plan:** Fill it from what the session verified, per the test-plan skill: commands, outcomes, and screenshots laid out as it says, with every image a capped `<img>`, whatever the template says about layout. Claim only what was checked. When the session verified nothing, leave the section empty under its heading and say so in the report.
 - **Screenshots:** Upload with `scripts/gh-upload --repo <the repo the PR opens on>`, since an attachment shows only on a PR of the repository it was uploaded to and the script defaults to `origin`, the wrong one in a fork layout. When the token cannot push there, `--release` on `origin` gives public URLs at once.
-- **Every other section:** Keep it as the template has it.
+- **Every other section:** Keep it as the template has it, less its comments.
 
 Keep the body's Markdown as written; commit-msg already writes it for a reviewer.
 
