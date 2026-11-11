@@ -1,6 +1,6 @@
 ---
 name: submit-stack
-description: Promote a stack of local commits to stacked GitHub pull requests with gh stack, or scripts/sl-pr-submit in a Sapling checkout, one PR per commit, moving each commit message body into its PR description and leaving each commit with its title alone. Takes "draft" to open the PRs as drafts. Use only when the user invokes /submit-stack or asks to submit the commits as a stack; for a single commit, use submit.
+description: Promote a stack of local commits to stacked GitHub pull requests with gh stack, or scripts/sl-stack-submit in a Sapling checkout, one PR per commit, moving each commit message body into its PR description and leaving each commit with its title alone. Takes "draft" to open the PRs as drafts. Use only when the user invokes /submit-stack or asks to submit the commits as a stack; for a single commit, use submit.
 license: MIT
 ---
 
@@ -30,13 +30,13 @@ Takes an optional `draft` argument. `gh stack submit` opens drafts by default, s
 
 ## Sapling
 
-`scripts/sl-pr-submit` stands in for `gh stack`. It runs `sl pr submit`, which pushes every draft under the working copy, after pulling and refusing a draft that is not yours; never run `sl pr submit` directly. The checkout's sl config, set by `scripts/checkout`, opens one PR per commit, each based on the branch of the PR below, the same shape `gh stack` makes, and keeps each PR's title and description on later submits. There are no layer branches to create and no backup to keep, since Sapling keeps every rewritten commit (`sl undo`).
+`scripts/sl-stack-submit` stands in for `gh stack`. It runs `sl pr submit`, which pushes every draft under the working copy, after pulling and refusing a draft that is not yours; never run `sl pr submit` directly. The checkout's sl config, set by `scripts/checkout`, opens one PR per commit, each based on the branch of the PR below, the same shape `gh stack` makes, and keeps each PR's title and description on later submits. There are no layer branches to create and no backup to keep, since Sapling keeps every rewritten commit (`sl undo`).
 
 A stack stays with the tool that opened it. When `gh stack view --json` succeeds, `gh stack` owns this one: follow the steps above, since `sl pr submit` opens a second PR for every layer it did not open. The one `gh stack` command a Sapling stack takes is `gh stack link`, which only registers existing PRs as a GitHub stack and keeps no local tracking.
 
 1. List the stack bottom to top with `sl log -r 'draft() & ::.' -T '{node} {github_pull_request_number}\n'`; a number means that commit is already submitted. Save each full message (`sl log -r <node> -T '{desc}'`) to `$(git rev-parse --git-dir)/submit/<node>.md`.
 2. Drop the bodies top to bottom, `sl metaedit -r <node> -m "<title>"`, so each edit restacks only commits already done.
-3. Push and open with `scripts/sl-pr-submit <checkout>` from the top commit, plus `--draft` for `draft`.
+3. Push and open with `scripts/sl-stack-submit -y <checkout>` from the top commit, plus `--draft` for `draft`. Always pass `-y`: without it the script asks for confirmation on a terminal.
 4. Register the PRs as a GitHub stack so the PR UI shows it: `gh stack link <numbers bottom to top> --remote origin` from inside the checkout. It keeps every PR number, branch and body; on a resubmit that added a layer, pass the stack number it printed first and the new PR after it. Later submits print `Cannot change the base branch because the pull request is part of a stack` for each PR and still push; the bases are already right.
 5. List the stack again for the numbers, then set each new PR's description from its saved message as step 5 above does, with `gh pr edit <number> --body-file <file>`. Leave out the stack footer Sapling appended: a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR, through the end of the body. The linked stack already shows in the PR UI, so the footer only duplicates it. A layer that already had a PR follows the submit skill's resubmit rules, including resolving the review threads its push addressed.
 6. A later submit that pushes anything rewrites the description of every open PR from the bottom up to the working copy with a fresh footer; a run that pushes nothing leaves them alone. After such a push, strip the footer again from each open PR's body, following the submit skill's rules for editing a submitted description and changing nothing else.
