@@ -31,8 +31,8 @@ Bold headings, each on its own line with a blank line before and after, when the
 | Motivation | Why the change is worth making: the user pain or technical driver. |
 | Problem / Root cause / Fix | Bug narratives. Use the subset that fits. |
 | This diff | What this commit does, when Context or Motivation sets up a broader effort. |
+| Impact | Why the change improves things: the win for users, speed, cost or downstream consumers, with its number where one was measured or estimated. Sits before Changes. |
 | Changes | Distinct changes grouped by concern, and the default heading for summary bullets. Omit only when a sentence covers the change. |
-| Impact | What this means for users, performance or downstream consumers. |
 | Notes | Caveats, limitations or remaining work. |
 
 Backtick every code symbol: API names, packages, paths, flags. In a stack, Context repeats word for word and only This diff changes.
