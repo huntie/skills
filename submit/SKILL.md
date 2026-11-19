@@ -13,7 +13,7 @@ Takes an optional `draft` argument.
 ## Preconditions
 
 - Git, or Sapling where git config has `devroot.vcs=sapling`, which follows its own section below.
-- The branch holds exactly one commit over its base, `origin/<default branch>` or the upstream's on a fork; in Sapling, `sl log -r 'draft() & ::.'` lists one commit. None: stop. Several: stop and offer to squash them into one, or submit-stack for one PR per commit.
+- The branch holds exactly one commit over its base, `origin/<base>` or the upstream's on a fork; in Sapling, `sl log -r 'draft() & ::.'` lists one commit. None: stop. Several: stop and offer to squash them into one, or submit-stack for one PR per commit.
 - The branch is a task branch, never the default branch. In Sapling on a shared repo, where `origin` is canonical, there is no named branch: the commit is a draft on top of the default branch, and `scripts/sl-stack-submit` pushes it as `pr<number>`. Never push a named branch for it.
 - Nothing here touches the working tree or the index.
 
@@ -23,7 +23,7 @@ The user's invocation is the confirmation for pushing and opening the PR; never 
 
 - Fork layout, where `upstream` exists: push to `origin`, and open the PR on the upstream repo with `--repo <upstream owner/repo> --head <origin owner>:<branch>`.
 - Shared repo, where `origin` is canonical: push to `origin` and open the PR there.
-- Base: the target repo's default branch, from `gh repo view <repo> --json defaultBranchRef`.
+- Base: the target repo's default branch, from `gh repo view <repo> --json defaultBranchRef`, unless the task names another, such as a release branch.
 
 ## Steps
 
@@ -68,6 +68,19 @@ The same steps and the same description, with `scripts/sl-stack-submit` doing th
 - Before a resubmit, check that `scripts/pr-info <checkout> --rev <node>` names the PR. The link is local to one machine, so a stack handed over from another machine or rebased since has none, and `sl pr submit` then opens a duplicate PR. Find the right commit first: the visible successor of the PR's remote head (`sl log -r 'successors(<head>)'`), confirmed by its own diff matching the head's. Hide a sibling copy with the same content from an older chain, then `sl pr link -r <node> <PR URL>` before submitting.
 - Resubmit with `scripts/sl-stack-submit -y <checkout>`. It leaves the title and description alone, so a changed title goes through `gh pr edit --title`, and a revised summary through `--body-file`, as above.
 - A commit in a stack of two or more PRs is the exception when resubmitted from any commit but the bottom one: that push rewrites the description of every open PR from the bottom up to it with Sapling's stack footer appended, a `---` line, the `[//]: # (BEGIN SAPLING FOOTER)` marker and one bullet per PR. The submit-stack skill keeps those descriptions footer-free, so after such a push strip the footer from each body as [Editing a submitted description](#editing-a-submitted-description) says, changing nothing else.
+
+### Another base in a Sapling repo
+
+`sl pr submit` only targets the default branch. A PR to another branch, such as a release branch, comes from a git-only clone, `scratch/<repo>-picks`, made once:
+
+```bash
+git clone --reference-if-able projects/<repo> --dissociate --no-checkout <origin URL> scratch/<repo>-picks
+git -C scratch/<repo>-picks config devroot.vcs git
+git -C scratch/<repo>-picks switch --detach origin/main
+git -C scratch/<repo>-picks branch -D main
+```
+
+There, `git fetch origin <base>` and `git switch -c <name> origin/<base>`, with the branch named as on any shared repo, then follow the git steps with `--base <base>`.
 
 ## The description
 
