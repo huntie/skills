@@ -17,7 +17,7 @@ Code explains itself, or it gets rewritten until it does. A comment is the last 
 - The bar for survival is a workaround for something external, such as a platform bug, a library quirk or a timing constraint, that reads as a mistake and invites a "fix" without the comment. Name the external cause in a line. Nothing else clears it: not an invariant the types or an assertion can carry, not an explanation of layout or arithmetic, not why the code has this shape.
 - A workaround that reads as ordinary code gets none: a `jest.mock` placed before a `require` is how tests look, whatever quirk of the toolchain forced the order.
 - A named constant or extracted function is the comment. Its name carries the whole explanation, so nothing sits above it: not a doc block, not the sentence the inline comment was going to say. A design value such as a spacing, an offset, a scale or a limit is a number someone chose, and the reason it looks right is taste, not a workaround: `const OFFSET = 16;` and nothing else.
-- Doc comments: at most one per exported function, type or module, and only when the name and signature leave a question a caller must answer. `findCheckRun(headSha, name)` leaves none, so `/** The latest check run named name on headSha, or null. */` goes. Behavior spanning units lives in the document read before the code, never repeated in it.
+- Doc comments: at most one per exported function, type or module, and only when the name and signature leave a question a caller must answer. `getUserById(id: string): User | null` leaves none, so `/** Returns the user with the given ID, or null if none exists. */` goes. Behavior spanning units lives in the document read before the code, never repeated in it.
 
 **Surrounding code is not precedent**
 
